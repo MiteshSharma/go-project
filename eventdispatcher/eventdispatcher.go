@@ -3,6 +3,8 @@ package eventdispatcher
 import (
 	"errors"
 
+	"github.com/MiteshSharma/project/bus"
+
 	"github.com/MiteshSharma/project/logger"
 )
 
@@ -10,13 +12,15 @@ type EventDispatcher struct {
 	EventQueue  chan Event
 	Dispatcher  *Dispatcher
 	Log         logger.Logger
+	Bus         bus.Bus
 	queueSize   int
 	workerCount int
 }
 
-func NewEventDispatcher(log logger.Logger, queueSize int, workerCount int) *EventDispatcher {
+func NewEventDispatcher(log logger.Logger, bus bus.Bus, queueSize int, workerCount int) *EventDispatcher {
 	eventDispatcher := &EventDispatcher{
 		Log:         log,
+		Bus:         bus,
 		queueSize:   queueSize,
 		workerCount: workerCount,
 	}
@@ -26,7 +30,7 @@ func NewEventDispatcher(log logger.Logger, queueSize int, workerCount int) *Even
 
 func (ed *EventDispatcher) Start() {
 	ed.EventQueue = make(chan Event, ed.queueSize)
-	ed.Dispatcher = NewDispatcher(ed.workerCount, ed.EventQueue, ed.Log)
+	ed.Dispatcher = NewDispatcher(ed.workerCount, ed.EventQueue, ed.Log, ed.Bus)
 	ed.Dispatcher.Start()
 }
 

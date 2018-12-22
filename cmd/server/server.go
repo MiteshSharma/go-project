@@ -13,6 +13,7 @@ import (
 
 	"github.com/MiteshSharma/project/api"
 	"github.com/MiteshSharma/project/app"
+	"github.com/MiteshSharma/project/bus"
 	"github.com/MiteshSharma/project/logger"
 	"github.com/MiteshSharma/project/metrics"
 	"github.com/MiteshSharma/project/middleware"
@@ -36,10 +37,11 @@ type Server struct {
 func NewServer(settingData *setting.Setting) *Server {
 	config := setting.GetConfig()
 	logger := logger.NewLogger(config)
+	bus := bus.NewBus(logger)
 	metrics := metrics.NewMetrics()
 	router := mux.NewRouter()
 	repository := repository.NewPersistentCacheRepository(logger, config, metrics)
-	eventDispatcher := eventdispatcher.NewEventDispatcher(logger, 10, 2)
+	eventDispatcher := eventdispatcher.NewEventDispatcher(logger, bus, 10, 2)
 	biEventHandler := bi.NewBiEventHandler(eventDispatcher)
 
 	appOption := &app.AppOption{
@@ -49,6 +51,7 @@ func NewServer(settingData *setting.Setting) *Server {
 		Metrics:        metrics,
 		Repository:     repository,
 		BiEventHandler: biEventHandler,
+		Bus:            bus,
 	}
 
 	api := api.NewAPI(router, appOption, config, metrics, logger)

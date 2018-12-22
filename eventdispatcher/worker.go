@@ -11,15 +11,17 @@ type Worker struct {
 	WorkerQueue  chan Worker
 	Quit         chan bool
 	Log          logger.Logger
+	Bus          bus.Bus
 }
 
-func NewWorker(id string, taskWorkerQueue chan Worker, log logger.Logger) *Worker {
+func NewWorker(id string, taskWorkerQueue chan Worker, log logger.Logger, bus bus.Bus) *Worker {
 	worker := &Worker{
 		Id:           id,
 		EventChannel: make(chan Event),
 		WorkerQueue:  taskWorkerQueue,
 		Quit:         make(chan bool),
 		Log:          log,
+		Bus:          bus,
 	}
 	return worker
 }
@@ -32,7 +34,7 @@ func (w *Worker) Start() {
 			select {
 			case event := <-w.EventChannel:
 				// Dispatch work from here
-				bus.GetBus().Publish(event.Name, event.Message)
+				w.Bus.Publish(event.Name, event.Message)
 			case <-w.Quit:
 				// Stop this worker
 				return

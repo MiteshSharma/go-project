@@ -3,6 +3,7 @@ package bus
 import (
 	"reflect"
 
+	"github.com/MiteshSharma/project/logger"
 	"go.uber.org/zap"
 )
 
@@ -14,23 +15,20 @@ type Bus interface {
 }
 
 type AppBus struct {
+	Log       logger.Logger
 	listeners map[string][]HandlerFunc
 }
 
-var _bus = newBus()
-
-func GetBus() Bus {
-	return _bus
-}
-
-func newBus() Bus {
-	bus := &AppBus{}
+func NewBus(logger logger.Logger) Bus {
+	bus := &AppBus{
+		Log: logger,
+	}
 	bus.listeners = make(map[string][]HandlerFunc)
 	return bus
 }
 
 func (b *AppBus) Publish(messageType string, msg interface{}) error {
-	zap.L().Debug("Message received by bus with type : " + messageType)
+	b.Log.Debug("Message received by bus with type : " + messageType)
 	_, isExists := b.listeners[messageType]
 	if isExists {
 		for _, listenerHandler := range b.listeners[messageType] {

@@ -1,6 +1,7 @@
 package eventdispatcher
 
 import (
+	"github.com/MiteshSharma/project/bus"
 	"github.com/MiteshSharma/project/logger"
 	uuid "github.com/satori/go.uuid"
 )
@@ -12,15 +13,17 @@ type Dispatcher struct {
 	Workers          []*Worker
 	Quit             chan bool
 	Log              logger.Logger
+	Bus              bus.Bus
 }
 
-func NewDispatcher(numWorker int, EventQueue chan Event, logger logger.Logger) *Dispatcher {
+func NewDispatcher(numWorker int, EventQueue chan Event, logger logger.Logger, bus bus.Bus) *Dispatcher {
 	dispatcher := &Dispatcher{
 		NumWorker:  numWorker,
 		EventQueue: EventQueue,
 		Workers:    make([]*Worker, numWorker),
 		Quit:       make(chan bool),
 		Log:        logger,
+		Bus:        bus,
 	}
 	return dispatcher
 }
@@ -30,7 +33,7 @@ func (d *Dispatcher) Start() {
 
 	for count := 0; count < d.NumWorker; count++ {
 		uid := uuid.NewV4()
-		worker := NewWorker(uid.String(), d.EventWorkerQueue, d.Log)
+		worker := NewWorker(uid.String(), d.EventWorkerQueue, d.Log, d.Bus)
 		d.Workers[count] = worker
 		d.Log.Info("Worked created for event handling with id :" + string(worker.Id))
 		worker.Start()

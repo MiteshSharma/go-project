@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/MiteshSharma/project/bi"
+	"github.com/MiteshSharma/project/bus"
 	"github.com/MiteshSharma/project/logger"
 	"github.com/MiteshSharma/project/metrics"
 	"github.com/MiteshSharma/project/model"
@@ -16,4 +17,5 @@ type AppOption struct {
 	Metrics        metrics.Metrics
 	Log            logger.Logger
 	BiEventHandler *bi.BiEventHandler
+	Bus            bus.Bus
 }
