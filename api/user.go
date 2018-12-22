@@ -22,7 +22,11 @@ func (a *API) create(c *wrapper.RequestContext, w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	c.App.CreateUser(user)
+	if err := c.App.CreateUser(user); err != nil {
+		a.Log.Warn("User object creation failed.")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	if user.UserID == 0 {
 		a.Log.Warn("User object creation failed as id is 0.")
 		w.WriteHeader(http.StatusInternalServerError)

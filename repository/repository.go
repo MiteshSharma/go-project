@@ -8,5 +8,5 @@ type Repository interface {
 }
 
 type UserRepository interface {
-	CreateUser(user *model.User)
+	CreateUser(user *model.User) error
 }

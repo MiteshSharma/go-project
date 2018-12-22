@@ -17,6 +17,9 @@ func NewSqlUserRepository(sqlRepository *SqlRepository) UserRepository {
 	return userRepository
 }
 
-func (ur UserRepository) CreateUser(user *model.User) {
-	ur.Log.Info("We reached here")
+func (ur UserRepository) CreateUser(user *model.User) error {
+	if err := ur.DB.Create(user).Error; err != nil {
+		return err
+	}
+	return nil
 }
