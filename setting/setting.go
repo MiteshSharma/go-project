@@ -3,14 +3,16 @@ package setting
 import "encoding/json"
 
 type Setting struct {
+	BuildNo   string
 	Version   string
 	Branch    string
 	Commit    string
 	StartTime string
 }
 
-func NewSetting(version string, branch string, commit string, startTime string) *Setting {
+func NewSetting(buildNo string, version string, branch string, commit string, startTime string) *Setting {
 	setting := &Setting{
+		BuildNo:   buildNo,
 		Version:   version,
 		Branch:    branch,
 		Commit:    commit,

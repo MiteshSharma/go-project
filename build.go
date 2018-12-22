@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,6 +10,7 @@ import (
 )
 
 var (
+	buildNo   string
 	commit    string
 	branch    string
 	version   string
@@ -16,6 +18,9 @@ var (
 )
 
 func main() {
+	flag.StringVar(&buildNo, "buildNo", "0", "Jenkin build number")
+	flag.Parse()
+
 	commit = runCommand("NA", "git", "rev-parse", "--short", "HEAD")
 	if commit == "" {
 		commit = "NA"
@@ -35,8 +40,8 @@ func main() {
 }
 
 func build(binaryName string, packageAddr string) {
-	ldFlags := fmt.Sprintf("-w -s -X main.version=%s -X main.commit=%s -X main.branch=%s -X main.startTime=%s",
-		version, commit, branch, startTime)
+	ldFlags := fmt.Sprintf("-w -s -X main.buildNo=%s -X main.version=%s -X main.commit=%s -X main.branch=%s -X main.startTime=%s",
+		buildNo, version, commit, branch, startTime)
 
 	args := []string{"build", "-ldflags", ldFlags, "-o", binaryName, packageAddr}
 

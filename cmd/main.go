@@ -16,9 +16,10 @@ var version = "1.0.0"
 var commit = ""
 var branch = "master"
 var startTime = ""
+var buildNo = "0"
 
 func main() {
-	setting := setting.NewSetting(version, commit, branch, startTime)
+	setting := setting.NewSetting(buildNo, version, commit, branch, startTime)
 	server := server.NewServer(setting)
 	defer server.StopServer()
 
