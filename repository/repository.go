@@ -8,5 +8,14 @@ type Repository interface {
 }
 
 type UserRepository interface {
-	CreateUser(user *model.User) error
+	CreateUser(user *model.User) *model.StorageResult
+	UpdateUser(user *model.User) *model.StorageResult
+	GetUser(userID int) *model.StorageResult
+	GetAllUsers() *model.StorageResult
+	GetUserByEmail(email string) *model.StorageResult
+	DeleteUser(userID int) *model.StorageResult
+	CreateUserDetail(userDetail *model.UserDetail) *model.StorageResult
+	UpdateUserDetail(userDetail *model.UserDetail) *model.StorageResult
+	GetRoles(userID int) *model.StorageResult
+	AttachRole(userRole *model.UserRole) *model.StorageResult
 }

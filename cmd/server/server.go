@@ -6,6 +6,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/MiteshSharma/project/api/middleware"
+
 	"github.com/MiteshSharma/project/bi"
 	"github.com/MiteshSharma/project/eventdispatcher"
 
@@ -16,7 +18,6 @@ import (
 	"github.com/MiteshSharma/project/bus"
 	"github.com/MiteshSharma/project/logger"
 	"github.com/MiteshSharma/project/metrics"
-	"github.com/MiteshSharma/project/middleware"
 	"github.com/MiteshSharma/project/model"
 	"github.com/MiteshSharma/project/repository"
 	"github.com/MiteshSharma/project/setting"

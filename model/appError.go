@@ -3,8 +3,9 @@ package model
 import "encoding/json"
 
 type AppError struct {
-	Message string
-	Status  int
+	Message   string
+	Status    int
+	RequestId string
 }
 
 func NewAppError(message string, status int) *AppError {

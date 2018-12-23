@@ -1,3 +1,4 @@
 .vscode/
 vendor/
 bin/
+log.log

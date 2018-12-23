@@ -25,6 +25,7 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	wh.HandlerFunc(rc, w, r)
 
 	if rc.Err != nil {
+		rc.Err.RequestId = rc.RequestID
 		w.Write([]byte(rc.Err.ToJson()))
 		w.WriteHeader(rc.Err.Status)
 		return

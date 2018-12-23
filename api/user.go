@@ -8,10 +8,10 @@ import (
 )
 
 func (a *API) InitUser() {
-	a.Router.User.Handle("", a.requestHandler(a.create)).Methods("POST")
+	a.Router.User.Handle("", a.requestHandler(a.createUser)).Methods("POST")
 }
 
-func (a *API) create(c *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
+func (a *API) createUser(c *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
 	user := model.UserFromJson(r.Body)
 	if user == nil {
 		c.SetError("Body received for user creation is invalid.", http.StatusBadRequest)
@@ -22,7 +22,7 @@ func (a *API) create(c *wrapper.RequestContext, w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if err := c.App.CreateUser(user); err != nil {
+	if _, err := c.App.CreateUser(user); err != nil {
 		a.Log.Warn("User object creation failed.")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
