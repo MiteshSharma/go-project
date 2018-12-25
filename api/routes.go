@@ -19,5 +19,7 @@ func (a *API) setupRoutes() {
 
 	a.InitHealthCheck()
 	a.InitUser()
+	a.InitUserDetail()
+	a.InitUserLogin()
 	a.InitSetting()
 }

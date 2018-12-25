@@ -11,6 +11,7 @@ import (
 type WebHandler struct {
 	AppOption   *app.AppOption
 	HandlerFunc func(*RequestContext, http.ResponseWriter, *http.Request)
+	IsLoggedIn  bool
 }
 
 func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +23,17 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set(model.HEADER_REQUEST_ID, rc.RequestID)
 
+	if wh.IsLoggedIn {
+		rc.App.UserSession, rc.Err = rc.GetSession(r)
+	}
+
+	if rc.Err != nil {
+		rc.Err.RequestId = rc.RequestID
+		w.Write([]byte(rc.Err.ToJson()))
+		w.WriteHeader(rc.Err.Status)
+		return
+	}
+
 	wh.HandlerFunc(rc, w, r)
 
 	if rc.Err != nil {
@@ -31,5 +43,5 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 }

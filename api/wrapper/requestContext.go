@@ -1,6 +1,8 @@
 package wrapper
 
 import (
+	"net/http"
+
 	"github.com/MiteshSharma/project/app"
 	"github.com/MiteshSharma/project/model"
 )
@@ -14,4 +16,16 @@ type RequestContext struct {
 
 func (rc *RequestContext) SetError(message string, statusCode int) {
 	rc.Err = model.NewAppError(message, statusCode)
+}
+
+func (rc *RequestContext) GetSession(r *http.Request) (*model.UserSession, *model.AppError) {
+	token, err := rc.GetToken(r)
+	if err == nil {
+		return rc.App.VerifyAndParseToken(token)
+	}
+	return nil, err
+}
+
+func (rc *RequestContext) GetToken(r *http.Request) (string, *model.AppError) {
+	return r.Header.Get("Authorization"), nil
 }

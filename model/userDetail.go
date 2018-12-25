@@ -1,7 +1,9 @@
 package model
 
 import (
+	"encoding/json"
 	"errors"
+	"io"
 	"time"
 )
 
@@ -25,4 +27,15 @@ func (ud *UserDetail) Valid() error {
 		return errors.New("user id can not be 0")
 	}
 	return nil
+}
+
+func (ud *UserDetail) ToJson() string {
+	json, _ := json.Marshal(ud)
+	return string(json)
+}
+
+func UserDetailFromJson(data io.Reader) *UserDetail {
+	var userDetail *UserDetail
+	json.NewDecoder(data).Decode(&userDetail)
+	return userDetail
 }

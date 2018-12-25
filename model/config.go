@@ -8,6 +8,7 @@ type Config struct {
 	CacheConfig    CacheConfig    `mapstructure:"cache"`
 	LoggerConfig   LoggerConfig   `mapstructure:"logger"`
 	ZipkinConfig   ZipkinConfig   `mapstructure:"zipkin"`
+	AuthConfig     AuthConfig     `mapstructure:"auth"`
 }
 
 // ServerConfig has only server specific configuration
@@ -45,4 +46,9 @@ type ZipkinConfig struct {
 // LoggerConfig has logger related configuration.
 type LoggerConfig struct {
 	LogFilePath string `mapstructure:"file"`
+}
+
+// AuthConfig has logger related configuration.
+type AuthConfig struct {
+	HmacSecret string `mapstructure:"hmacSecret"`
 }

@@ -3,6 +3,8 @@ package redisRepository
 import (
 	"fmt"
 
+	"github.com/MiteshSharma/project/repository/sqlRepository"
+
 	"github.com/go-redis/redis"
 
 	"github.com/MiteshSharma/project/logger"
@@ -10,17 +12,21 @@ import (
 )
 
 type RedisRepository struct {
-	Redis  *redis.Client
-	Log    logger.Logger
-	Config model.CacheConfig
+	Redis          *redis.Client
+	Log            logger.Logger
+	Config         model.CacheConfig
+	SQLRepository  *sqlRepository.SqlRepository
+	UserRepository UserRepository
 }
 
-func NewRedisRepository(logger logger.Logger, config model.CacheConfig) *RedisRepository {
+func NewRedisRepository(logger logger.Logger, config model.CacheConfig, sqlRepository *sqlRepository.SqlRepository) *RedisRepository {
 	redisRepository := &RedisRepository{
-		Log:    logger,
-		Config: config,
+		Log:           logger,
+		Config:        config,
+		SQLRepository: sqlRepository,
 	}
 	redisRepository.Redis = redisRepository.getRedis(config)
+	redisRepository.UserRepository = NewUserRepository(redisRepository)
 
 	return redisRepository
 }

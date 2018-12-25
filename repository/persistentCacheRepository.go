@@ -18,6 +18,10 @@ func NewPersistentCacheRepository(log logger.Logger, config *model.Config, metri
 		PersistentRepository: NewPersistentRepository(log, config, metrics),
 	}
 
-	repository.RedisRepository = redisRepository.NewRedisRepository(log, config.CacheConfig)
+	repository.RedisRepository = redisRepository.NewRedisRepository(log, config.CacheConfig, repository.SqlRepository)
 	return repository
+}
+
+func (s *PersistentCacheRepository) User() UserRepository {
+	return s.RedisRepository.UserRepository
 }

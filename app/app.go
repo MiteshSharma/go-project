@@ -15,8 +15,9 @@ type App struct {
 	Setting        *setting.Setting
 	Metrics        metrics.Metrics
 	Log            logger.Logger
-	BiEventHandler *bi.BiEventHandler
+	BiEventHandler bi.EventHandler
 	RequestID      string
+	UserSession    *model.UserSession
 }
 
 func NewApp(appOption *AppOption) *App {

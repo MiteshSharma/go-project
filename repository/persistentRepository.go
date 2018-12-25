@@ -14,7 +14,7 @@ type PersistentRepository struct {
 	Config        *model.Config
 	Metrics       metrics.Metrics
 
-	UserRepository *sqlRepository.UserRepository
+	UserRepository UserRepository
 }
 
 func NewPersistentRepository(log logger.Logger, config *model.Config, metrics metrics.Metrics) *PersistentRepository {

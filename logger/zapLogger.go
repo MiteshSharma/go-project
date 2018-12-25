@@ -16,7 +16,6 @@ func NewLogger(config *model.Config) *ZapLogger {
 	zapLogger := &ZapLogger{
 		Zap: logger,
 	}
-	logger.Info("Yos")
 	return zapLogger
 }
 

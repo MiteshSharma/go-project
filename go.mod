@@ -4,6 +4,7 @@ require (
 	github.com/DataDog/zstd v1.3.4 // indirect
 	github.com/Shopify/sarama v1.20.0 // indirect
 	github.com/apache/thrift v0.0.0-20181217171848-56ac72e74ae3 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/eapache/go-resiliency v1.1.0 // indirect
 	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
@@ -36,5 +37,6 @@ require (
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
 	golang.org/x/arch v0.0.0-20181203225421-5a4828bb7045 // indirect
+	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/net v0.0.0-20181201002055-351d144fa1fc
 )

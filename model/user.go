@@ -13,7 +13,7 @@ type User struct {
 	FirstName     string     `gorm:"type:varchar(64)" json:"firstName"`
 	LastName      string     `gorm:"type:varchar(64)" json:"lastName"`
 	Email         string     `gorm:"type:varchar(100);unique_index" json:"email"`
-	Password      string     `gorm:"type:varchar(256)" json:"password,omitempty"`
+	Password      string     `gorm:"type:varchar(256)" json:"-"`
 	Salt          string     `gorm:"type:varchar(64)" json:"-"`
 	ResetPassword string     `gorm:"type:varchar(32)" json:"-"`
 	CreatedAt     *time.Time `json:"-"`
@@ -34,8 +34,24 @@ func (u *User) ToJson() string {
 	return string(json)
 }
 
+func UsersToJson(users []*User) string {
+	json, _ := json.Marshal(users)
+	return string(json)
+}
+
 func UserFromJson(data io.Reader) *User {
 	var user *User
 	json.NewDecoder(data).Decode(&user)
 	return user
+}
+
+// UserAuth struct
+type UserAuth struct {
+	User  *User  `json:"user"`
+	Token string `json:"token"`
+}
+
+func (u *UserAuth) ToJson() string {
+	json, _ := json.Marshal(u)
+	return string(json)
 }

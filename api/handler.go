@@ -10,5 +10,14 @@ func (api *API) requestHandler(handler func(c *wrapper.RequestContext, w http.Re
 	return &wrapper.WebHandler{
 		AppOption:   api.AppOption,
 		HandlerFunc: handler,
+		IsLoggedIn:  false,
+	}
+}
+
+func (api *API) requestWithAuthHandler(handler func(c *wrapper.RequestContext, w http.ResponseWriter, r *http.Request)) http.Handler {
+	return &wrapper.WebHandler{
+		AppOption:   api.AppOption,
+		HandlerFunc: handler,
+		IsLoggedIn:  true,
 	}
 }
