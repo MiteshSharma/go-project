@@ -9,7 +9,14 @@ import (
 )
 
 func GetConfig() *model.Config {
-	viper.SetConfigName("default")
+	return GetConfigFromFile("default")
+}
+
+func GetConfigFromFile(fileName string) *model.Config {
+	if fileName == "" {
+		fileName = "default"
+	}
+	viper.SetConfigName(fileName)
 	viper.AddConfigPath("../conf/")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("./conf/")

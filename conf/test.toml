@@ -16,9 +16,9 @@ port="9411"
 type="mysql"
 host="127.0.0.1"
 dbName="godb"
-userName="root"
+userName="go"
 password="root"
-connectionString="root:root@/godb?charset=utf8&parseTime=True&loc=Local"
+connectionString="go:root@tcp(localhost:3306)/godb?charset=utf8&parseTime=True&loc=Local"
 
 [cache]
 type="redis"

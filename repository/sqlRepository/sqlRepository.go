@@ -1,7 +1,6 @@
 package sqlRepository
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/MiteshSharma/project/logger"
@@ -38,7 +37,7 @@ func (s *SqlRepository) getDb(config model.DatabaseConfig) *gorm.DB {
 	var db *gorm.DB
 	switch config.Type {
 	case "mysql":
-		mysqlDb, err := gorm.Open("mysql", s.getMysqlURL(config))
+		mysqlDb, err := gorm.Open("mysql", config.ConnectionString)
 		if err != nil {
 			s.Log.Error("Connecting mysql failed due to error ", logger.Error(err))
 			os.Exit(1)
@@ -49,11 +48,6 @@ func (s *SqlRepository) getDb(config model.DatabaseConfig) *gorm.DB {
 		break
 	}
 	return db
-}
-
-func (s *SqlRepository) getMysqlURL(config model.DatabaseConfig) string {
-	return fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
-		config.UserName, config.Password, config.DbName)
 }
 
 func (s *SqlRepository) Close() error {

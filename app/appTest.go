@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/MiteshSharma/project/repository"
+	"github.com/MiteshSharma/project/repository/docker"
+
 	"github.com/MiteshSharma/project/bus"
 
 	"github.com/MiteshSharma/project/bi"
@@ -14,31 +17,59 @@ import (
 )
 
 type AppTest struct {
-	App *App
+	App         *App
+	MySQLDocker *docker.MysqlDocker
 }
 
-func Setup() *AppTest {
+type AppTestOption struct {
+	AppOption   *AppOption
+	MySQLDocker *docker.MysqlDocker
+}
+
+var appTestOption *AppTestOption
+
+func SetupAppTestOption() *AppTestOption {
+	fmt.Println("Starting setup app test option")
 	now := time.Now()
 	startTime := fmt.Sprintf("%d", now.Unix())
 	settingData := setting.NewSetting("1", "1", "NA", "master", startTime)
-	config := setting.GetConfig()
-
+	config := setting.GetConfigFromFile("test")
+	logger := logger.NewTestLogger(config)
+	metrics := metrics.NewTestMetrics()
+	mysqlDocker := &docker.MysqlDocker{}
+	mysqlDocker.StartMysqlDocker()
+	// Wait for docker mysql server to start
+	time.Sleep(10 * time.Second)
+	repository := repository.NewPersistentRepository(logger, config, metrics)
 	appOption := &AppOption{
 		Config:         config,
 		Setting:        settingData,
-		Log:            logger.NewTestLogger(config),
-		Metrics:        metrics.NewTestMetrics(),
-		Repository:     nil,
+		Log:            logger,
+		Metrics:        metrics,
+		Repository:     repository,
 		BiEventHandler: bi.NewBiTestEventHandler(),
 		Bus:            bus.NewTestBus(),
 	}
-	app := NewApp(appOption)
 
-	appTest := &AppTest{
-		App: app,
+	appTestOption = &AppTestOption{
+		AppOption:   appOption,
+		MySQLDocker: mysqlDocker,
 	}
-	return appTest
+	fmt.Println("App test option created")
+	return appTestOption
 }
 
-func (at *AppTest) Cleanup() {
+func (ato *AppTestOption) Cleanup() {
+	fmt.Println("App test option cleanup called")
+	ato.MySQLDocker.Stop()
+}
+
+func SetupAppTest() *AppTest {
+	app := NewApp(appTestOption.AppOption)
+	return &AppTest{
+		App: app,
+	}
+}
+
+func (at *AppTest) CleanupAppTest() {
 }

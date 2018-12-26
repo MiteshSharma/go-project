@@ -45,8 +45,8 @@ func build(binaryName string, packageAddr string) {
 
 	args := []string{"build", "-ldflags", ldFlags, "-o", binaryName, packageAddr}
 
-	output := runCommand("", "go", args...)
-	fmt.Println("Output of build command : %s", output)
+	runCommand("", "go", args...)
+	//fmt.Println("Output of build command : %s", output)
 }
 
 func runCommand(defaultResponse string, cmd string, args ...string) string {

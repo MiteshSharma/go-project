@@ -21,11 +21,12 @@ type ServerConfig struct {
 
 // DatabaseConfig has database related configuration.
 type DatabaseConfig struct {
-	Type     string `mapstructure:"type"`
-	Host     string `mapstructure:"host"`
-	DbName   string `mapstructure:"dbName"`
-	UserName string `mapstructure:"userName"`
-	Password string `mapstructure:"password"`
+	Type             string `mapstructure:"type"`
+	Host             string `mapstructure:"host"`
+	DbName           string `mapstructure:"dbName"`
+	UserName         string `mapstructure:"userName"`
+	Password         string `mapstructure:"password"`
+	ConnectionString string `mapstructure:"connectionString"`
 }
 
 // CacheConfig has cache related configuration.
