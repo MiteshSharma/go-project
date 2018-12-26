@@ -3,6 +3,9 @@ package metrics
 import (
 	"fmt"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -28,7 +31,14 @@ func NewMetrics() Metrics {
 		RequestCounter: requestCounter,
 		RequestSummary: requestSummary,
 	}
+
+	prometheus.MustRegister(requestCounter)
+	prometheus.MustRegister(requestSummary)
 	return metrics
+}
+
+func (p *Prometheus) SetupHttpHandler(router *mux.Router) {
+	router.Handle("", promhttp.Handler()).Methods("GET")
 }
 
 func (p *Prometheus) RequestReceivedDetail(path string, method string, code int, elapsedDuration float64) {
