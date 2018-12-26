@@ -1,5 +1,5 @@
 package metrics
 
 type Metrics interface {
-	RequestReceived(code string, method string)
+	RequestReceivedDetail(path string, method string, code int, elapsedDuration float64)
 }

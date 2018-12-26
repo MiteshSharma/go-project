@@ -1,27 +1,37 @@
 package metrics
 
 import (
+	"fmt"
+
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Prometheus struct {
-	RequestCounter *prometheus.CounterVec
+	RequestCounter prometheus.Counter
+	RequestSummary *prometheus.SummaryVec
 }
 
 func NewMetrics() Metrics {
-	requestCounter := prometheus.NewCounterVec(
+	requestCounter := prometheus.NewCounter(
 		prometheus.CounterOpts{
 			Name: "http_requests_total",
-			Help: "HTTP requests count, partitioned by status code and HTTP method.",
+			Help: "HTTP requests total count",
+		})
+	requestSummary := prometheus.NewSummaryVec(
+		prometheus.SummaryOpts{
+			Name: "http_request_duration",
+			Help: "HTTP request summary with path, status code, method and duration",
 		},
-		[]string{"code", "method"},
+		[]string{"path", "statuscode", "method"},
 	)
 	metrics := &Prometheus{
 		RequestCounter: requestCounter,
+		RequestSummary: requestSummary,
 	}
 	return metrics
 }
 
-func (p *Prometheus) RequestReceived(code string, method string) {
-	p.RequestCounter.WithLabelValues(code, method).Inc()
+func (p *Prometheus) RequestReceivedDetail(path string, method string, code int, elapsedDuration float64) {
+	p.RequestCounter.Inc()
+	p.RequestSummary.WithLabelValues(path, fmt.Sprintf("%d", code), method).Observe(elapsedDuration)
 }

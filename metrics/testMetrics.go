@@ -8,5 +8,5 @@ func NewTestMetrics() Metrics {
 	return metrics
 }
 
-func (p *TestMetrics) RequestReceived(code string, method string) {
+func (p *TestMetrics) RequestReceivedDetail(path string, method string, code int, elapsedDuration float64) {
 }

@@ -2,6 +2,7 @@ package wrapper
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/MiteshSharma/project/app"
 	"github.com/MiteshSharma/project/model"
@@ -15,6 +16,8 @@ type WebHandler struct {
 }
 
 func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	now := time.Now()
+
 	rc := &RequestContext{}
 	rc.App = app.NewApp(wh.AppOption)
 	rc.RequestID = uuid.NewV4().String()
@@ -27,21 +30,20 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rc.App.UserSession, rc.Err = rc.GetSession(r)
 	}
 
-	if rc.Err != nil {
-		rc.Err.RequestId = rc.RequestID
-		w.Write([]byte(rc.Err.ToJson()))
-		w.WriteHeader(rc.Err.Status)
-		return
+	if rc.Err == nil {
+		wh.HandlerFunc(rc, w, r)
 	}
 
-	wh.HandlerFunc(rc, w, r)
-
+	statusCode := http.StatusOK
 	if rc.Err != nil {
+		statusCode = rc.Err.Status
 		rc.Err.RequestId = rc.RequestID
 		w.Write([]byte(rc.Err.ToJson()))
-		w.WriteHeader(rc.Err.Status)
-		return
 	}
+	w.WriteHeader(statusCode)
 
-	w.WriteHeader(http.StatusOK)
+	if rc.App.Metrics != nil {
+		elapsedDuration := float64(time.Since(now).Nanoseconds()) / float64(time.Millisecond)
+		rc.App.Metrics.RequestReceivedDetail(rc.Path, r.Method, statusCode, elapsedDuration)
+	}
 }
