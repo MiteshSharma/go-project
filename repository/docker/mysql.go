@@ -1,6 +1,7 @@
 package docker
 
 const mysqlStartTimeout = 10
+const mysqlPortOpenTimeout = 10
 
 type MysqlDocker struct {
 	Docker Docker
@@ -23,6 +24,7 @@ func (m *MysqlDocker) StartMysqlDocker() {
 	m.Docker = Docker{}
 	m.Docker.Start(containerOption)
 	m.Docker.WaitForStartOrKill(mysqlStartTimeout)
+	m.Docker.WaitForPortOpen(mysqlPortOpenTimeout)
 }
 
 func (m *MysqlDocker) Stop() {

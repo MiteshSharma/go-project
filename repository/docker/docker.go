@@ -3,6 +3,7 @@ package docker
 import (
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"os/exec"
 	"strings"
@@ -18,6 +19,7 @@ const (
 type Docker struct {
 	ContainerID   string
 	ContainerName string
+	Option        ContainerOption
 }
 
 type ContainerOption struct {
@@ -38,6 +40,7 @@ func (d *Docker) isInstalled() bool {
 }
 
 func (d *Docker) Start(c ContainerOption) (string, error) {
+	d.Option = c
 	dockerArgs := d.getDockerRunOptions(c)
 	command := exec.Command("docker", dockerArgs...)
 	command.Stderr = os.Stderr
@@ -68,7 +71,7 @@ func (d *Docker) WaitForStartOrKill(timeout int) error {
 		time.Sleep(time.Second)
 	}
 	d.Stop()
-	return errors.New("Docker faile to start in given time period so stopped")
+	return errors.New("Docker fail to start in given time period so stopped")
 }
 
 func (d *Docker) getContainerStatus() string {
@@ -92,6 +95,32 @@ func (d *Docker) getContainerStatus() string {
 		}
 	}
 	return dockerStatusStarting
+}
+
+func (d *Docker) WaitForPortOpen(timeout int) error {
+	for tick := 0; tick < timeout; tick += 2 {
+		err := d.checkIfPortOpen()
+		if err == nil {
+			return nil
+		}
+		time.Sleep(time.Second)
+	}
+	return errors.New("Docker fail to open port in given time period")
+}
+
+func (d *Docker) checkIfPortOpen() error {
+	conn, err := net.DialTimeout("tcp", "localhost:"+d.Option.PortExpose, time.Second)
+	defer conn.Close()
+	if err != nil {
+		return err
+	}
+	one := []byte{}
+	conn.SetReadDeadline(time.Now().Add(time.Millisecond * 100))
+	_, err = conn.Read(one)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *Docker) getDockerRunOptions(c ContainerOption) []string {
