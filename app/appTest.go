@@ -64,6 +64,7 @@ func SetupAppTestOption() *AppTestOption {
 func (ato *AppTestOption) Cleanup() {
 	fmt.Println("App test option cleanup called")
 	ato.MySQLDocker.Stop()
+	time.Sleep(10 * time.Second)
 }
 
 func SetupAppTest() *AppTest {

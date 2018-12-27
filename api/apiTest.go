@@ -78,6 +78,7 @@ func GetApiTest() *APITest {
 
 func (at *APITest) CleanUpApiTest() {
 	at.MySQLDocker.Stop()
+	time.Sleep(10 * time.Second)
 }
 
 func (at *APITest) CheckValidTestUser(t *testing.T, expectedUser *model.User, receivedUser *model.User) {
