@@ -2,11 +2,9 @@ package api
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/MiteshSharma/project/api/wrapper"
 	"github.com/MiteshSharma/project/model"
-	"github.com/gorilla/mux"
 )
 
 func (a *API) InitUserLogin() {
@@ -36,15 +34,9 @@ func (a *API) userLogin(rc *wrapper.RequestContext, w http.ResponseWriter, r *ht
 }
 
 func (a *API) userLogout(rc *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	userIDVal := vars["userId"]
-	if userIDVal == "" {
-		rc.SetError("UserId received to update userID is invalid.", http.StatusBadRequest)
-		return
-	}
-	userID, err := strconv.Atoi(userIDVal)
-	if err != nil {
-		rc.SetError("UserId value invalid, not a integer.", http.StatusBadRequest)
+	userID := rc.App.UserSession.UserID
+	if userID == 0 {
+		rc.SetError("UserId received is invalid.", http.StatusBadRequest)
 		return
 	}
 	rc.App.UserLogout(userID)

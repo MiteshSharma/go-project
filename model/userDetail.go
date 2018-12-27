@@ -39,3 +39,9 @@ func UserDetailFromJson(data io.Reader) *UserDetail {
 	json.NewDecoder(data).Decode(&userDetail)
 	return userDetail
 }
+
+func UserDetailFromString(data string) *UserDetail {
+	var userDetail *UserDetail
+	json.Unmarshal([]byte(data), &userDetail)
+	return userDetail
+}

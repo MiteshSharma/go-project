@@ -27,15 +27,15 @@ func (a *App) SignToken(userID int, roles []model.Role) (string, *model.AppError
 	}
 
 	result := a.Repository.User().GetSession(userID)
-	var existingUserSession model.UserSession
+	var existingUserSession *model.UserSession
 	if result.Err == nil {
-		existingUserSession = result.Data.(model.UserSession)
+		existingUserSession = result.Data.(*model.UserSession)
 	}
 	session := &model.UserSession{
 		UserID: userID,
 		Token:  tokenString,
 	}
-	if existingUserSession == (model.UserSession{}) {
+	if existingUserSession == nil {
 		a.Repository.User().CreateSession(session)
 	} else {
 		a.Repository.User().UpdateSession(session)
