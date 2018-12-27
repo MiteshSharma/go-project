@@ -53,7 +53,7 @@ func (ur UserRepository) UpdateUser(user *model.User) *model.StorageResult {
 
 func (ur UserRepository) GetUser(userID int) *model.StorageResult {
 	var user model.User
-	if err := ur.DB.First(user, userID).Error; err != nil {
+	if err := ur.DB.First(&user, userID).Error; err != nil {
 		return model.NewStorageResult(nil, model.NewAppError(err.Error(), http.StatusInternalServerError))
 	}
 	return model.NewStorageResult(&user, nil)

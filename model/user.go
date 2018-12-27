@@ -45,6 +45,12 @@ func UserFromJson(data io.Reader) *User {
 	return user
 }
 
+func UserFromString(data string) *User {
+	var user *User
+	json.Unmarshal([]byte(data), &user)
+	return user
+}
+
 // UserAuth struct
 type UserAuth struct {
 	User  *User  `json:"user"`
@@ -54,4 +60,10 @@ type UserAuth struct {
 func (u *UserAuth) ToJson() string {
 	json, _ := json.Marshal(u)
 	return string(json)
+}
+
+func UserAuthFromString(data string) *UserAuth {
+	var userAuth *UserAuth
+	json.Unmarshal([]byte(data), &userAuth)
+	return userAuth
 }

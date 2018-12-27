@@ -137,3 +137,7 @@ func (d *Docker) getDockerRunOptions(c ContainerOption) []string {
 func (d *Docker) Stop() {
 	exec.Command("docker", "rm", "-f", d.ContainerID).Run()
 }
+
+func (d *Docker) StopByName() {
+	exec.Command("docker", "rm", "-f", d.ContainerName).Run()
+}

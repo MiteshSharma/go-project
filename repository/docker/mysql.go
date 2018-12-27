@@ -4,7 +4,8 @@ const mysqlStartTimeout = 10
 const mysqlPortOpenTimeout = 10
 
 type MysqlDocker struct {
-	Docker Docker
+	Docker        Docker
+	ContainerName string
 }
 
 func (m *MysqlDocker) StartMysqlDocker() {
@@ -15,13 +16,16 @@ func (m *MysqlDocker) StartMysqlDocker() {
 		"MYSQL_DATABASE":      "godb",
 	}
 	containerOption := ContainerOption{
-		Name:              "project-mysql-1",
+		Name:              m.ContainerName,
 		Options:           mysqlOptions,
 		MountVolumePath:   "/var/lib/mysql",
 		PortExpose:        "3306",
 		ContainerFileName: "mysql:5.7",
 	}
-	m.Docker = Docker{}
+	m.Docker = Docker{
+		ContainerName: m.ContainerName,
+	}
+	m.Docker.StopByName()
 	m.Docker.Start(containerOption)
 	m.Docker.WaitForStartOrKill(mysqlStartTimeout)
 	m.Docker.WaitForPortOpen(mysqlPortOpenTimeout)
