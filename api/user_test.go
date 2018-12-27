@@ -16,8 +16,8 @@ func TestCreateUser(t *testing.T) {
 	apiTest := GetApiTest()
 
 	user := GetTestUser()
-	userAuth := CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	CheckValidTestUser(t, user, userAuth.User)
+	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
+	apiTest.CheckValidTestUser(t, user, userAuth.User)
 
 	if userAuth.Token == "" {
 		t.Errorf("handler returned wrong token: got %v",
@@ -30,8 +30,8 @@ func TestUpdateUser(t *testing.T) {
 	apiTest := GetApiTest()
 
 	user := GetTestUser()
-	userAuth := CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	CheckValidTestUser(t, user, userAuth.User)
+	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
+	apiTest.CheckValidTestUser(t, user, userAuth.User)
 
 	if userAuth.Token == "" {
 		t.Errorf("handler returned wrong token: got %v",
@@ -78,8 +78,8 @@ func TestGetUser(t *testing.T) {
 	apiTest := GetApiTest()
 
 	user := GetTestUser()
-	userAuth := CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	CheckValidTestUser(t, user, userAuth.User)
+	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
+	apiTest.CheckValidTestUser(t, user, userAuth.User)
 
 	if userAuth.Token == "" {
 		t.Errorf("handler returned wrong token: got %v",
@@ -114,8 +114,8 @@ func TestDeleteUser(t *testing.T) {
 	apiTest := GetApiTest()
 
 	user := GetTestUser()
-	userAuth := CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	CheckValidTestUser(t, user, userAuth.User)
+	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
+	apiTest.CheckValidTestUser(t, user, userAuth.User)
 
 	if userAuth.Token == "" {
 		t.Errorf("handler returned wrong token: got %v",
@@ -147,8 +147,8 @@ func TestGetAllUser(t *testing.T) {
 	apiTest := GetApiTest()
 
 	user := GetTestUser()
-	userAuth := CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	CheckValidTestUser(t, user, userAuth.User)
+	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
+	apiTest.CheckValidTestUser(t, user, userAuth.User)
 
 	if userAuth.Token == "" {
 		t.Errorf("handler returned wrong token: got %v",
