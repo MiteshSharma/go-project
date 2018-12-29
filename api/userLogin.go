@@ -29,8 +29,7 @@ func (a *API) userLogin(rc *wrapper.RequestContext, w http.ResponseWriter, r *ht
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(userAuth.ToJson()))
+	rc.SetAppResponse(userAuth.ToJson(), http.StatusCreated)
 }
 
 func (a *API) userLogout(rc *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
@@ -41,6 +40,5 @@ func (a *API) userLogout(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 	}
 	rc.App.UserLogout(userID)
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("{'response': 'OK'}"))
+	rc.SetAppResponse("{'response': 'OK'}", http.StatusOK)
 }

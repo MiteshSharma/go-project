@@ -60,7 +60,7 @@ func TestUserLogout(t *testing.T) {
 
 	expectedUser := userAuth.User
 	req, err := http.NewRequest("DELETE", fmt.Sprintf("/api/v1/user/%d/auth", expectedUser.UserID), nil)
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}

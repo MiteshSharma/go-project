@@ -62,7 +62,7 @@ func (ur UserRepository) GetSession(userID int) *model.StorageResult {
 	if err != nil {
 		return model.NewStorageResult(nil, model.NewAppError(err.Error(), http.StatusInternalServerError))
 	}
-	return model.NewStorageResult(session, nil)
+	return model.NewStorageResult(&session, nil)
 }
 
 func (ur UserRepository) DeleteSession(userID int) *model.StorageResult {

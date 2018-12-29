@@ -52,7 +52,19 @@ func (a *App) CreateUser(user *model.User) (*model.UserAuth, *model.AppError) {
 }
 
 func (a *App) UpdateUser(user *model.User) (*model.User, *model.AppError) {
-	storageResult := a.Repository.User().UpdateUser(user)
+	storageResult := a.Repository.User().GetUser(user.UserID)
+	if storageResult.Err != nil {
+		return nil, storageResult.Err
+	}
+	existingUser := storageResult.Data.(*model.User)
+	if user.FirstName != "" {
+		existingUser.FirstName = user.FirstName
+	}
+	if user.LastName != "" {
+		existingUser.LastName = user.LastName
+	}
+
+	storageResult = a.Repository.User().UpdateUser(existingUser)
 	if storageResult.Err != nil {
 		return nil, storageResult.Err
 	}

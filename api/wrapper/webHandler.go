@@ -40,7 +40,13 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rc.Err.RequestId = rc.RequestID
 		w.Write([]byte(rc.Err.ToJson()))
 	}
+	if rc.AppResponse != nil {
+		statusCode = rc.AppResponse.Status
+	}
 	w.WriteHeader(statusCode)
+	if rc.AppResponse != nil {
+		w.Write([]byte(rc.AppResponse.Response))
+	}
 
 	if rc.App.Metrics != nil {
 		elapsedDuration := float64(time.Since(now).Nanoseconds()) / float64(time.Millisecond)

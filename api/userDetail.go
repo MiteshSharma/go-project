@@ -26,6 +26,5 @@ func (a *API) updateUserDetail(rc *wrapper.RequestContext, w http.ResponseWriter
 		rc.SetError("User object update failed.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(userDetail.ToJson()))
+	rc.SetAppResponse(userDetail.ToJson(), http.StatusOK)
 }

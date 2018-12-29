@@ -44,7 +44,7 @@ func TestUpdateUser(t *testing.T) {
 	expectedUser.LastName = "NewTest"
 	jsonUser, _ := json.Marshal(expectedUser)
 	req, err := http.NewRequest("PUT", fmt.Sprintf("/api/v1/user/%d", expectedUser.UserID), bytes.NewBuffer(jsonUser))
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -90,7 +90,7 @@ func TestGetUser(t *testing.T) {
 
 	t.Log(expectedUser)
 	req, err := http.NewRequest("GET", fmt.Sprintf("/api/v1/user/%d", expectedUser.UserID), nil)
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -126,7 +126,7 @@ func TestDeleteUser(t *testing.T) {
 
 	t.Log(expectedUser)
 	req, err := http.NewRequest("DELETE", fmt.Sprintf("/api/v1/user/%d", expectedUser.UserID), nil)
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +156,7 @@ func TestGetAllUser(t *testing.T) {
 	}
 
 	req, err := http.NewRequest("GET", "/api/v1/user", nil)
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}

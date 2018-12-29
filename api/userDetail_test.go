@@ -32,7 +32,7 @@ func TestUpdateUserDetail(t *testing.T) {
 	t.Log(expectedUser)
 	jsonUserDetail, _ := json.Marshal(userDetail)
 	req, err := http.NewRequest("PUT", fmt.Sprintf("/api/v1/user/%d/userDetail", expectedUser.UserID), bytes.NewBuffer(jsonUserDetail))
-	req.Header.Set("Authorization", userAuth.Token)
+	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
 	if err != nil {
 		t.Fatal(err)
 	}

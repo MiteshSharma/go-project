@@ -32,8 +32,7 @@ func (a *API) createUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 		rc.SetError("User object creation failed.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(userAuth.ToJson()))
+	rc.SetAppResponse(userAuth.ToJson(), http.StatusCreated)
 }
 
 // UpdateHandler func is used to create user
@@ -52,8 +51,7 @@ func (a *API) updateUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 		rc.SetError("User object update failed.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(user.ToJson()))
+	rc.SetAppResponse(user.ToJson(), http.StatusOK)
 }
 
 // GetHandler func is used to get user or users
@@ -66,8 +64,7 @@ func (a *API) getUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *http
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(user.ToJson()))
+	rc.SetAppResponse(user.ToJson(), http.StatusOK)
 }
 
 // DeleteHandler func is to delete user
@@ -77,8 +74,7 @@ func (a *API) deleteUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 		rc.SetError("User object get failed.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("{'response': 'OK'}"))
+	rc.SetAppResponse("{'response': 'OK'}", http.StatusOK)
 }
 
 // GetHandler func is used to get user or users
@@ -90,6 +86,5 @@ func (a *API) getAllUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(model.UsersToJson(users)))
+	rc.SetAppResponse(model.UsersToJson(users), http.StatusOK)
 }

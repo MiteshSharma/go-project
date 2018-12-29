@@ -8,14 +8,19 @@ import (
 )
 
 type RequestContext struct {
-	RequestID string
-	Path      string
-	App       *app.App
-	Err       *model.AppError
+	RequestID   string
+	Path        string
+	AppResponse *model.AppResponse
+	App         *app.App
+	Err         *model.AppError
 }
 
 func (rc *RequestContext) SetError(message string, statusCode int) {
 	rc.Err = model.NewAppError(message, statusCode)
+}
+
+func (rc *RequestContext) SetAppResponse(response string, statusCode int) {
+	rc.AppResponse = model.NewAppResponse(response, statusCode)
 }
 
 func (rc *RequestContext) GetSession(r *http.Request) (*model.UserSession, *model.AppError) {
@@ -27,5 +32,5 @@ func (rc *RequestContext) GetSession(r *http.Request) (*model.UserSession, *mode
 }
 
 func (rc *RequestContext) GetToken(r *http.Request) (string, *model.AppError) {
-	return r.Header.Get("Authorization"), nil
+	return r.Header.Get(model.AUTHENTICATION), nil
 }
