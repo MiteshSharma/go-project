@@ -28,8 +28,9 @@ type User struct {
 	//
 	// required: true
 	// example: user@goproject.com
-	Email         string     `gorm:"type:varchar(100);unique_index" json:"email"`
-	Password      string     `gorm:"type:varchar(256)" json:"-"`
+	Email string `gorm:"type:varchar(100);unique_index" json:"email"`
+	// the password for login this user
+	Password      string     `gorm:"type:varchar(256)" json:"password"`
 	Salt          string     `gorm:"type:varchar(64)" json:"-"`
 	ResetPassword string     `gorm:"type:varchar(32)" json:"-"`
 	CreatedAt     *time.Time `json:"-"`
@@ -46,6 +47,7 @@ func (u *User) Valid() error {
 }
 
 func (u *User) ToJson() string {
+	u.Password = ""
 	json, _ := json.Marshal(u)
 	return string(json)
 }
@@ -78,6 +80,9 @@ type UserAuth struct {
 }
 
 func (u *UserAuth) ToJson() string {
+	if u.User != nil {
+		u.User.Password = ""
+	}
 	json, _ := json.Marshal(u)
 	return string(json)
 }

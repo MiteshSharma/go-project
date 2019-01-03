@@ -15,7 +15,7 @@
     "termsOfService": "there are no TOS at this moment, use at your own risk we take no responsibility",
     "contact": {
       "name": "Mitesh Sharma",
-      "email": "mitesh.iitroorkee@gmail.com"
+      "email": "godev@goproject.com"
     },
     "license": {
       "name": "MIT",
@@ -427,6 +427,11 @@
           "type": "string",
           "minLength": 3,
           "x-go-name": "LastName"
+        },
+        "password": {
+          "description": "the password for login this user",
+          "type": "string",
+          "x-go-name": "Password"
         },
         "userId": {
           "description": "the id for this user",
