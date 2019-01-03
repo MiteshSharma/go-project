@@ -1,0 +1,534 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "the purpose of this application is to provide an application\nthat is using plain go code to define an API\n\nThis should demonstrate all the possible comment annotations\nthat are available to turn go code into a fully compliant swagger 2.0 spec",
+    "title": "Basic Sample Go Project API.",
+    "termsOfService": "there are no TOS at this moment, use at your own risk we take no responsibility",
+    "contact": {
+      "name": "Mitesh Sharma",
+      "email": "mitesh.iitroorkee@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
+    "version": "0.0.1"
+  },
+  "host": "localhost:3002",
+  "basePath": "/api/v1",
+  "paths": {
+    "/user": {
+      "get": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Get all user objects created",
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all user objects",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success return user data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Send email with other user details to create new user. Email must be unique.",
+        "tags": [
+          "user"
+        ],
+        "summary": "Create new user",
+        "operationId": "users",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "type": "string",
+            "description": "password of user",
+            "name": "password",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success return user auth containing user with auth token",
+            "schema": {
+              "$ref": "#/definitions/UserAuth"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Get user object based on unique user identifier.",
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user object",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success return user data",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Send user body with userId with other user data which needs to be updated.",
+        "tags": [
+          "user"
+        ],
+        "summary": "Update user",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "updated user body, must have userId non zero",
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success return updated user",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Delete user entry from backend.",
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deleted successfully return response ok"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}/auth": {
+      "post": {
+        "description": "Send email with password to authenticate.",
+        "tags": [
+          "userLogin"
+        ],
+        "summary": "login user",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "email",
+            "example": "user@goproject.com",
+            "description": "email of user",
+            "name": "email",
+            "in": "body",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "password of user",
+            "name": "password",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success return user",
+            "schema": {
+              "$ref": "#/definitions/UserAuth"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Logout user",
+        "tags": [
+          "userLogin"
+        ],
+        "summary": "Logout user",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deleted successfully return response ok"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}/userDetail": {
+      "put": {
+        "security": [
+          {
+            "AuthKey": []
+          }
+        ],
+        "description": "Send user detail identifier with userId which needs to be updated.",
+        "tags": [
+          "userDetail"
+        ],
+        "summary": "Update user details",
+        "operationId": "users",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JTW token used to validate user",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "int",
+            "description": "unique identifier of user",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "updated user details, must have userId and userDetailId non zero",
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success return updated user",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/AppError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AppError": {
+      "type": "object",
+      "properties": {
+        "Message": {
+          "type": "string"
+        },
+        "RequestId": {
+          "type": "string"
+        },
+        "Status": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "github.com/MiteshSharma/project/model"
+    },
+    "User": {
+      "description": "User -- model for user data",
+      "type": "object",
+      "required": [
+        "userId",
+        "firstName",
+        "lastName",
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "description": "the email address for this user",
+          "type": "string",
+          "x-go-name": "Email",
+          "example": "user@goproject.com"
+        },
+        "firstName": {
+          "description": "the first name for this user",
+          "type": "string",
+          "minLength": 3,
+          "x-go-name": "FirstName"
+        },
+        "lastName": {
+          "description": "the last name for this user",
+          "type": "string",
+          "minLength": 3,
+          "x-go-name": "LastName"
+        },
+        "userId": {
+          "description": "the id for this user",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/MiteshSharma/project/model"
+    },
+    "UserAuth": {
+      "description": "UserAuth -- model for user auth",
+      "type": "object",
+      "properties": {
+        "token": {
+          "description": "JWT token used to validate user",
+          "type": "string",
+          "x-go-name": "Token"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "x-go-package": "github.com/MiteshSharma/project/model"
+    },
+    "UserDetail": {
+      "description": "UserDetail struct",
+      "type": "object",
+      "required": [
+        "userDetailId",
+        "userId"
+      ],
+      "properties": {
+        "userDetailId": {
+          "description": "the id for this user detail",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "x-go-name": "UserDetailID"
+        },
+        "userId": {
+          "description": "the id for this user",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "x-go-name": "UserID"
+        },
+        "utmCampaign": {
+          "description": "campaign from where user came",
+          "type": "string",
+          "x-go-name": "UtmCampaign"
+        },
+        "utmContent": {
+          "description": "content from where user came",
+          "type": "string",
+          "x-go-name": "UtmContent"
+        },
+        "utmMedium": {
+          "description": "medium from where user came",
+          "type": "string",
+          "x-go-name": "UtmMedium"
+        },
+        "utmSource": {
+          "description": "source from where user came",
+          "type": "string",
+          "x-go-name": "UtmSource"
+        }
+      },
+      "x-go-package": "github.com/MiteshSharma/project/model"
+    }
+  },
+  "responses": {
+    "AppErrorResponse": {
+      "description": "An AppErrorResponse response model\n\nThis is used for returning a response with a single order as body",
+      "schema": {
+        "$ref": "#/definitions/AppError"
+      }
+    },
+    "UserAuthResponse": {
+      "description": "An UserAuthResponse response model\n\nThis is used for returning a response with a single order as body",
+      "schema": {
+        "$ref": "#/definitions/UserAuth"
+      }
+    },
+    "UserDetailResponse": {
+      "description": "An UserDetailResponse response model\n\nThis is used for returning a response with a single user detail as body",
+      "schema": {
+        "$ref": "#/definitions/UserDetail"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "AuthKey": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "AuthKey": []
+    }
+  ]
+}

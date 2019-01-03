@@ -8,6 +8,37 @@ import (
 )
 
 func (a *API) InitUserDetail() {
+	// swagger:operation PUT /user/{userId}/userDetail userDetail users
+	// ---
+	// summary: Update user details
+	// description: Send user detail identifier with userId which needs to be updated.
+	// Security:
+	// - AuthKey: []
+	// parameters:
+	// - name: Authorization
+	//   in: header
+	//   description: JTW token used to validate user
+	//   type: string
+	//   required: true
+	// - name: userId
+	//   in: path
+	//   description: unique identifier of user
+	//   type: int
+	//   required: true
+	// - name: body
+	//   in: body
+	//   description: updated user details, must have userId and userDetailId non zero
+	//   schema:
+	//      $ref: '#/definitions/UserDetail'
+	// Responses:
+	//  200:
+	//   description: success return updated user
+	//   schema:
+	//     "$ref": '#/definitions/UserDetail'
+	//  default:
+	//   description: unexpected error
+	//   schema:
+	//     "$ref": "#/definitions/AppError"
 	a.Router.User.Handle("/{userId:[0-9]+}/userDetail", a.requestWithAuthHandler(a.updateUserDetail)).Methods("PUT")
 }
 

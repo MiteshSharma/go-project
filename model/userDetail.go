@@ -9,16 +9,28 @@ import (
 
 // UserDetail struct
 type UserDetail struct {
-	UserDetailID int        `gorm:"primary_key" json:"userDetailId"`
-	UserID       int        `json:"userId"`
-	User         User       `gorm:"foreignkey:UserID"`
-	UtmSource    string     `gorm:"type:varchar(64)" json:"utmSource"`
-	UtmCampaign  string     `gorm:"type:varchar(64)" json:"utmCampaign"`
-	UtmMedium    string     `gorm:"type:varchar(64)" json:"utmMedium"`
-	UtmContent   string     `gorm:"type:varchar(64)" json:"utmContent"`
-	CreatedAt    *time.Time `json:"-"`
-	UpdatedAt    *time.Time `json:"-"`
-	DeletedAt    *time.Time `json:"-"`
+	// the id for this user detail
+	//
+	// required: true
+	// min: 1
+	UserDetailID int `gorm:"primary_key" json:"userDetailId"`
+	// the id for this user
+	//
+	// required: true
+	// min: 1
+	UserID int  `json:"userId"`
+	User   User `gorm:"foreignkey:UserID" json:"-"`
+	// source from where user came
+	UtmSource string `gorm:"type:varchar(64)" json:"utmSource"`
+	// campaign from where user came
+	UtmCampaign string `gorm:"type:varchar(64)" json:"utmCampaign"`
+	// medium from where user came
+	UtmMedium string `gorm:"type:varchar(64)" json:"utmMedium"`
+	// content from where user came
+	UtmContent string     `gorm:"type:varchar(64)" json:"utmContent"`
+	CreatedAt  *time.Time `json:"-"`
+	UpdatedAt  *time.Time `json:"-"`
+	DeletedAt  *time.Time `json:"-"`
 }
 
 // Valid function is to check if policy object is valid

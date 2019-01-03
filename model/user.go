@@ -7,11 +7,27 @@ import (
 	"time"
 )
 
-// User struct
+// User -- model for user data
+//
+// swagger:model User
 type User struct {
-	UserID        int        `gorm:"primary_key" json:"userId"`
-	FirstName     string     `gorm:"type:varchar(64)" json:"firstName"`
-	LastName      string     `gorm:"type:varchar(64)" json:"lastName"`
+	// the id for this user
+	//
+	// required: true
+	// min: 1
+	UserID int `gorm:"primary_key" json:"userId"`
+	// the first name for this user
+	// required: true
+	// min length: 3
+	FirstName string `gorm:"type:varchar(64)" json:"firstName"`
+	// the last name for this user
+	// required: true
+	// min length: 3
+	LastName string `gorm:"type:varchar(64)" json:"lastName"`
+	// the email address for this user
+	//
+	// required: true
+	// example: user@goproject.com
 	Email         string     `gorm:"type:varchar(100);unique_index" json:"email"`
 	Password      string     `gorm:"type:varchar(256)" json:"-"`
 	Salt          string     `gorm:"type:varchar(64)" json:"-"`
@@ -51,9 +67,13 @@ func UserFromString(data string) *User {
 	return user
 }
 
-// UserAuth struct
+// UserAuth -- model for user auth
+//
+// swagger:model UserAuth
 type UserAuth struct {
-	User  *User  `json:"user"`
+	// user data
+	User *User `json:"user"`
+	// JWT token used to validate user
 	Token string `json:"token"`
 }
 
