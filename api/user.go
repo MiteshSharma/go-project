@@ -17,11 +17,6 @@ func (a *API) InitUser() {
 	//   in: body
 	//   schema:
 	//      $ref: '#/definitions/User'
-	// - name: password
-	//   in: body
-	//   description: password of user
-	//   type: string
-	//   required: true
 	// Responses:
 	//  201:
 	//   description: success return user auth containing user with auth token

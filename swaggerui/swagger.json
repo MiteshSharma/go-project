@@ -80,13 +80,6 @@
             "schema": {
               "$ref": "#/definitions/User"
             }
-          },
-          {
-            "type": "string",
-            "description": "password of user",
-            "name": "password",
-            "in": "body",
-            "required": true
           }
         ],
         "responses": {
