@@ -19,8 +19,16 @@ func (rc *RequestContext) SetError(message string, statusCode int) {
 	rc.Err = model.NewAppError(message, statusCode)
 }
 
+func (rc *RequestContext) SetPermissionError(permission *model.Permission) {
+	rc.Err = model.NewAppError(permission.Description, http.StatusForbidden)
+}
+
 func (rc *RequestContext) SetAppResponse(response string, statusCode int) {
 	rc.AppResponse = model.NewAppResponse(response, statusCode)
+}
+
+func (rc *RequestContext) IsSudoUser() bool {
+	return rc.App.UserHasPermissionTo(model.PERMISSION_SUDO_USER.ID)
 }
 
 func (rc *RequestContext) GetSession(r *http.Request) (*model.UserSession, *model.AppError) {

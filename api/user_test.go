@@ -141,28 +141,3 @@ func TestDeleteUser(t *testing.T) {
 			res.Body.String(), "{'response': 'OK'}")
 	}
 }
-
-func TestGetAllUser(t *testing.T) {
-	t.Log("Starting get all user test case")
-	apiTest := GetApiTest()
-
-	user := GetTestUser()
-	userAuth := apiTest.CreateUserAuthFromTestAPI(t, apiTest.API, user)
-	apiTest.CheckValidTestUser(t, user, userAuth.User)
-
-	if userAuth.Token == "" {
-		t.Errorf("handler returned wrong token: got %v",
-			userAuth.Token)
-	}
-
-	req, err := http.NewRequest("GET", "/api/v1/user", nil)
-	req.Header.Set(model.AUTHENTICATION, userAuth.Token)
-	if err != nil {
-		t.Fatal(err)
-	}
-	res := httptest.NewRecorder()
-	handler := apiTest.API.requestWithAuthHandler(apiTest.API.getAllUser)
-	handler.ServeHTTP(res, req)
-
-	CheckOkStatus(t, res.Code)
-}

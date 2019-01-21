@@ -13,6 +13,7 @@ type WebHandler struct {
 	AppOption   *app.AppOption
 	HandlerFunc func(*RequestContext, http.ResponseWriter, *http.Request)
 	IsLoggedIn  bool
+	IsSudoUser  bool
 }
 
 func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -28,6 +29,10 @@ func (wh *WebHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if wh.IsLoggedIn {
 		rc.App.UserSession, rc.Err = rc.GetSession(r)
+	}
+
+	if wh.IsSudoUser && !rc.IsSudoUser() {
+		rc.SetPermissionError(model.PERMISSION_SUDO_USER)
 	}
 
 	if rc.Err == nil {

@@ -32,7 +32,7 @@ func (a *App) CreateUser(user *model.User) (*model.UserAuth, *model.AppError) {
 		return nil, storageResult.Err
 	}
 
-	roles := []model.Role{model.ADMIN}
+	roles := []string{model.ADMIN}
 	userRole := &model.UserRole{
 		UserID: user.UserID,
 		Role:   model.ADMIN,
@@ -131,7 +131,7 @@ func (a *App) UserLogin(user *model.User) (*model.UserAuth, *model.AppError) {
 			return nil, storageResult.Err
 		}
 		roles := storageResult.Data.([]model.UserRole)
-		var rolesObj []model.Role
+		var rolesObj []string
 		for _, role := range roles {
 			rolesObj = append(rolesObj, role.Role)
 		}

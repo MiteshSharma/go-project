@@ -114,7 +114,7 @@ func (a *API) InitUser() {
 	// swagger:operation GET /user user users
 	// ---
 	// summary: Get all user objects
-	// description: Get all user objects created
+	// description: Get all user objects created, can be fetched only by sudo user
 	// Security:
 	// - AuthKey: []
 	// parameters:
@@ -134,7 +134,7 @@ func (a *API) InitUser() {
 	//   description: unexpected error
 	//   schema:
 	//     "$ref": "#/definitions/AppError"
-	a.Router.User.Handle("", a.requestWithAuthHandler(a.getAllUser)).Methods("GET")
+	a.Router.User.Handle("", a.requestWithSudoHandler(a.getAllUser)).Methods("GET")
 }
 
 // CreateHandler func is used to create user
@@ -176,7 +176,7 @@ func (a *API) updateUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 	rc.SetAppResponse(user.ToJson(), http.StatusOK)
 }
 
-// GetHandler func is used to get user or users
+// getUser func is used to get user or users
 func (a *API) getUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
 	userID := rc.App.UserSession.UserID
 	var user *model.User
@@ -189,7 +189,7 @@ func (a *API) getUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *http
 	rc.SetAppResponse(user.ToJson(), http.StatusOK)
 }
 
-// DeleteHandler func is to delete user
+// deleteUser func is to delete user
 func (a *API) deleteUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
 	userID := rc.App.UserSession.UserID
 	if _, err := rc.App.DeleteUser(userID); err != nil {
@@ -199,7 +199,7 @@ func (a *API) deleteUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *h
 	rc.SetAppResponse("{'response': 'OK'}", http.StatusOK)
 }
 
-// GetHandler func is used to get user or users
+// getAllUser func is used to get user or users
 func (a *API) getAllUser(rc *wrapper.RequestContext, w http.ResponseWriter, r *http.Request) {
 	var users []*model.User
 	var err *model.AppError

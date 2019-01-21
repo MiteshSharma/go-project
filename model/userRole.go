@@ -10,7 +10,7 @@ type UserRole struct {
 	UserRoleID int        `gorm:"primary_key"`
 	UserID     int        `gorm:"type:varchar(64)"`
 	User       User       `gorm:"foreignkey:UserID" json:"-"`
-	Role       Role       `gorm:"type:varchar(64)"`
+	Role       string     `gorm:"type:varchar(64)"`
 	CreatedAt  *time.Time `json:"-"`
 	UpdatedAt  *time.Time `json:"-"`
 	DeletedAt  *time.Time `json:"-"`

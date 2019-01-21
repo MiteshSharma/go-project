@@ -38,5 +38,5 @@ require (
 	go.uber.org/zap v1.9.1
 	golang.org/x/arch v0.0.0-20181203225421-5a4828bb7045 // indirect
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
-	golang.org/x/net v0.0.0-20181201002055-351d144fa1fc
+	google.golang.org/appengine v1.4.0 // indirect
 )

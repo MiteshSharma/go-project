@@ -7,11 +7,12 @@ import (
 
 	"github.com/MiteshSharma/project/logger"
 	"github.com/MiteshSharma/project/model"
+	"github.com/MiteshSharma/project/util"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func (a *App) SignToken(userID int, roles []model.Role) (string, *model.AppError) {
+func (a *App) SignToken(userID int, roles []string) (string, *model.AppError) {
 	currentTime := time.Now().Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID":      userID,
@@ -34,6 +35,7 @@ func (a *App) SignToken(userID int, roles []model.Role) (string, *model.AppError
 	session := &model.UserSession{
 		UserID: userID,
 		Token:  tokenString,
+		Roles:  util.StringArrayToString(roles),
 	}
 	if existingUserSession == nil {
 		a.Repository.User().CreateSession(session)

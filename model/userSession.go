@@ -12,6 +12,7 @@ type UserSession struct {
 	UserID        int        `gorm:"type:varchar(64)" json:"userId"`
 	User          User       `gorm:"foreignkey:UserID" json:"-"`
 	Token         string     `gorm:"type:varchar(1024)"`
+	Roles         string     `gorm:"type:varchar(1024)"`
 	CreatedAt     *time.Time `json:"-"`
 	UpdatedAt     *time.Time `json:"-"`
 	DeletedAt     *time.Time `json:"-"`
