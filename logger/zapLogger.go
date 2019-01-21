@@ -23,7 +23,7 @@ func generateConfig(appConfig *model.Config) zap.Config {
 	loggerConfig := zap.NewProductionConfig()
 	if (appConfig != nil) && ((model.LoggerConfig{}) != appConfig.LoggerConfig) {
 		loggerConfig.Encoding = "json"
-		loggerConfig.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+		loggerConfig.Level = zap.NewAtomicLevelAt(getLevel(appConfig.LoggerConfig.LogLevel))
 		loggerConfig.OutputPaths = []string{"stderr", appConfig.LoggerConfig.LogFilePath}
 		loggerConfig.ErrorOutputPaths = []string{"stderr", appConfig.LoggerConfig.LogFilePath}
 		loggerConfig.EncoderConfig = zapcore.EncoderConfig{
@@ -53,4 +53,19 @@ func (zl *ZapLogger) Warn(message string, args ...Argument) {
 
 func (zl *ZapLogger) Error(message string, args ...Argument) {
 	zl.Zap.Error(message, args...)
+}
+
+func getLevel(level string) zapcore.Level {
+	switch level {
+	case "debug":
+		return zap.DebugLevel
+	case "info":
+		return zap.InfoLevel
+	case "warn":
+		return zap.WarnLevel
+	case "error":
+		return zap.ErrorLevel
+	default:
+		return zap.DebugLevel
+	}
 }

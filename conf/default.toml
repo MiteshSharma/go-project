@@ -6,6 +6,7 @@ closeTimeout=5
 
 [logger]
 file="log.log"
+level="debug"
 
 [zipkin]
 isEnable=false

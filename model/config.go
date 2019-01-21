@@ -47,6 +47,7 @@ type ZipkinConfig struct {
 // LoggerConfig has logger related configuration.
 type LoggerConfig struct {
 	LogFilePath string `mapstructure:"file"`
+	LogLevel    string `mapstructure:"level"`
 }
 
 // AuthConfig has logger related configuration.
