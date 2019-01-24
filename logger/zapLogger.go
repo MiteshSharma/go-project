@@ -7,14 +7,16 @@ import (
 )
 
 type ZapLogger struct {
-	Zap *zap.Logger
+	Zap    *zap.Logger
+	Config zap.Config
 }
 
 func NewLogger(config *model.Config) *ZapLogger {
 	zapConfig := generateConfig(config)
 	logger, _ := zapConfig.Build(zap.AddCallerSkip(1), zap.AddCaller())
 	zapLogger := &ZapLogger{
-		Zap: logger,
+		Zap:    logger,
+		Config: zapConfig,
 	}
 	return zapLogger
 }
@@ -37,6 +39,10 @@ func generateConfig(appConfig *model.Config) zap.Config {
 		}
 	}
 	return loggerConfig
+}
+
+func (zl *ZapLogger) OnConfigChange(newConfig *model.Config) {
+	zl.Config.Level.SetLevel(getLevel(newConfig.LoggerConfig.LogLevel))
 }
 
 func (zl *ZapLogger) Debug(message string, args ...Argument) {

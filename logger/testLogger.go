@@ -23,3 +23,6 @@ func (zl *TestLogger) Warn(message string, args ...Argument) {
 
 func (zl *TestLogger) Error(message string, args ...Argument) {
 }
+
+func (zl *TestLogger) OnConfigChange(newConfig *model.Config) {
+}

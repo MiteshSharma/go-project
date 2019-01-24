@@ -37,7 +37,9 @@ type Server struct {
 
 func NewServer(settingData *setting.Setting) *Server {
 	config := setting.GetConfig()
+	setting.WatcherConfig()
 	logger := logger.NewLogger(config)
+	setting.AddConfigChangeListener(logger)
 	bus := bus.NewBus(logger)
 	metrics := metrics.NewMetrics()
 	router := mux.NewRouter()
@@ -101,5 +103,6 @@ func (s *Server) StopServer() {
 	defer cancel()
 	s.httpServer.Shutdown(ctx)
 
+	setting.DeleteConfigChangeListener(s.Log)
 	os.Exit(0)
 }
